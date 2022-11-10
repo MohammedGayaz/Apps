@@ -2,7 +2,6 @@ import tkinter as tk
 import math
 
 # ---------------------------- CONSTANTS ------------------------------- #
-# PINK = "#e2979c"
 PINK = "#FF043E"
 RED = "#FF5858"
 GREEN = "#9bdeac"
@@ -19,6 +18,7 @@ timer = None
 
 # ---------------------------- TIMER RESET ------------------------------- # 
 
+#reseting timer and the scores
 def reset_timer():
     global rep, round_count, long_break_count, short_break_count
     timer_canvas.itemconfig(timer_text, text="00:00")
@@ -30,34 +30,39 @@ def reset_timer():
 
 # ---------------------------- TIMER MECHANISM ------------------------------- #
 
+#for editing the round text at bottom
 def round_text(round_count):
     round_lable.config(text=f"{round_count}/4")
     heading_canvas.itemconfig(heading_text, text="FOCUS")
     heading_canvas.config(background=RED, highlightthickness=0)
     timer_canvas.config(background=RED, highlightthickness=0)
-
+    
+#for editing the short break text at the bottom
 def short_break_text(short_break_count):
     short_break_lable.config(text=f"{short_break_count}")
     heading_canvas.itemconfig(heading_text, text="SHORT BREAK")
     heading_canvas.config(background=GREEN,highlightthickness=0)
     timer_canvas.config(background=GREEN,highlightthickness=0)
 
+#for editing the long break text at the bottom
 def long_break_text(long_break_count):
     long_breal_lable.config(text=f"{long_break_count}")
     heading_canvas.itemconfig(heading_text, text="LONG BREAK")
     heading_canvas.config(background=GREEN, highlightthickness=0)
     timer_canvas.config(background=GREEN, highlightthickness=0)
-
+  
 def start_timer():
     global rep, long_break_count, short_break_count, round_count
     work_sec = WORK_MIN * 60
     short_break_sec = SHORT_BREAK_MIN * 60
     long_break_sec = LONG_BREAK_MIN * 60
+    #if it is 8th rep then long break and reset reps to 0
     if rep == 7:
         count_down(long_break_sec)
         rep = 0
         long_break_count += 1
         long_break_text(long_break_count)
+    #if it is even rep the work
     elif rep % 2 == 0:
         count_down(work_sec)
         rep += 1
@@ -65,6 +70,7 @@ def start_timer():
             round_count = 0
         round_count += 1
         round_text(round_count)
+    #if it is odd rep the small break
     else:
         count_down(short_break_sec)
         rep += 1
@@ -72,6 +78,7 @@ def start_timer():
         short_break_text(short_break_count)
 
 # ---------------------------- COUNTDOWN MECHANISM ------------------------------- #
+
 def count_down(count):
     global timer
     count_min = math.floor(count / 60)
@@ -82,24 +89,18 @@ def count_down(count):
         count_sec = f"0{count_sec}"
     timer_canvas.itemconfig(timer_text, text=f"{count_min}:{count_sec}")
     if count > 0:
-        timer = window.after(1000, count_down, count - 1)
+        timer = window.after(1000, count_down, count - 1) # the while loop contridicts the window.mainloop() so we use .after method
     else:
+        #continues the timer for break after a work session but will not start timer automatically after break
         if rep % 2 != 0:
             start_timer()
 
 # ---------------------------- UI SETUP ------------------------------- #
 
-
-
 window = tk.Tk()
 window.minsize(width=400, height=600)
 window.maxsize(width=400, height=600)
 window.title("Pomodoro")
-
-
-TASK_COORD = (60, 50)
-SHORT_BREAK_COORD = (200, 50)
-LONG_BREAK_COORD = (330, 50)
 
 
 #heading canvas
@@ -113,7 +114,6 @@ heading_canvas.grid(column=0, row=0)
 timer_canvas = tk.Canvas(width=400, height= 400, bd = -2)
 timer_canvas.config(background=RED)
 timer_text = timer_canvas.create_text(200, 150, text="00:00", fill="white", font=(FONT_NAME, 60,"bold"))
-
 
 start_button = tk.Button(timer_canvas, text="Start", font=(FONT_NAME, 14, "normal"), command=start_timer)
 start_button.config(padx=156, background=GREEN)
@@ -142,7 +142,5 @@ canvas.create_text(320, 20, text="LONG BREAK")
 long_breal_lable = tk.Label(canvas, text="0", background=YELLOW, font=(FONT_NAME, 40, "normal"))
 long_breal_lable.place(x=300, y=30)
 canvas.grid(column=0, row=2)
-
-
 
 window.mainloop()
