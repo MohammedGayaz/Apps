@@ -104,22 +104,24 @@ window.title("Pomodoro")
 
 
 #heading canvas
-heading_canvas = tk.Canvas(width=400, height=100, bd=-2)
+heading_canvas = tk.Canvas(width=400, height=100, highlightthickness=0)
 heading_canvas.config(background=RED)
 heading_text = heading_canvas.create_text(200, 80, text="TIMER", fill=YELLOW, font=(FONT_NAME, 30,"normal"))
 heading_canvas.grid(column=0, row=0)
 
 
 #main center timer text
-timer_canvas = tk.Canvas(width=400, height= 400, bd = -2)
+timer_canvas = tk.Canvas(width=400, height= 400, highlightthickness=0)
 timer_canvas.config(background=RED)
 timer_text = timer_canvas.create_text(200, 150, text="00:00", fill="white", font=(FONT_NAME, 60,"bold"))
 
 start_button = tk.Button(timer_canvas, text="Start", font=(FONT_NAME, 14, "normal"), command=start_timer)
+start_button.config(highlightthickness=0)
 start_button.config(padx=156, background=GREEN)
 start_button.place(x=10, y=300)
 
 stop_button = tk.Button(timer_canvas, text="Stop", font=(FONT_NAME, 14, "normal"), command=reset_timer)
+stop_button.config(highlightthickness=0)
 stop_button.config(padx=161, background=PINK)
 stop_button.place(x=10, y= 350)
 
