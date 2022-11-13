@@ -9,7 +9,7 @@ new_dict = {"website": []}
 def panda_dict(new_dict):
     try:
         json_data = pd.read_json("userFiles/data.json")
-    except ValueError:
+    except (ValueError, FileNotFoundError):
         messagebox.showinfo(title="Oops", message="Please make sure you have some data")
     else:
         data_dict = json_data.to_dict()
@@ -39,7 +39,6 @@ class TableData():
         table_window.title('Table app')
         f = Frame(table_window)
         f.grid()
-        df = data_table()
         self.table = pt = Table(f, dataframe=df, )  # showtoolbar=True, showstatusbar=True)
         pt.show()
         return
